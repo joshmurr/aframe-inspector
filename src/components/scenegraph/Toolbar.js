@@ -66,29 +66,24 @@ export default class Toolbar extends React.Component {
   }
 
   /**
-   * Try to write changes with aframe-inspector-watcher.
+   * NOTE: Post changes rather than use AFrame Watcher
    */
   writeChanges = () => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:51234/save');
-    xhr.onerror = () => {
-      alert('aframe-watcher not running. This feature requires a companion service running locally. npm install aframe-watcher to save changes back to file. Read more at supermedium.com/aframe-watcher');
-    };
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(AFRAME.INSPECTOR.history.updates));
+    var changes = AFRAME.INSPECTOR.history.updates;
+    parent.postMessage(JSON.stringify(changes), '*');
   };
 
   toggleScenePlaying = () => {
     if (this.state.isPlaying) {
       AFRAME.scenes[0].pause();
-      this.setState({isPlaying: false});
+      this.setState({ isPlaying: false });
       AFRAME.scenes[0].isPlaying = true;
       document.getElementById('aframeInspectorMouseCursor').play();
       return;
     }
     AFRAME.scenes[0].isPlaying = false;
     AFRAME.scenes[0].play();
-    this.setState({isPlaying: true});
+    this.setState({ isPlaying: true });
   }
 
   render() {

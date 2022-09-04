@@ -93,7 +93,7 @@ Inspector.prototype = {
     });
 
     this.scene.add(this.sceneHelpers);
-    this.open();
+    this.close(); /* NOTE: Close the UI immediately */
   },
 
   removeObject: function(object) {
