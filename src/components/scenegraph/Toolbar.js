@@ -112,7 +112,7 @@ export default class Toolbar extends React.Component {
             className="gltfIcon"
             title="Export to GLTF"
             onClick={this.exportSceneToGLTF}>
-            <img src={process.env.NODE_ENV === 'production' ? 'https://aframe.io/aframe-inspector/assets/gltf.svg' : '../assets/gltf.svg'} />
+            <img src={'../../images/gltf.svg'} />
           </a>
           <a
             className={watcherClassNames}
