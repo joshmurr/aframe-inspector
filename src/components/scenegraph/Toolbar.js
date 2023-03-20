@@ -1,6 +1,6 @@
 import classnames from "classnames";
+import objectAssign from "object-assign";
 import React from "react";
-import Events from "../../lib/Events.js";
 import { saveBlob } from "../../lib/utils";
 
 const LOCALSTORAGE_MOCAP_UI = "aframeinspectormocapuienabled";
@@ -61,15 +61,16 @@ export default class Toolbar extends React.Component {
     );
   }
 
-  addEntity() {
-    Events.emit("entitycreate", { element: "a-entity", components: {} });
-  }
-
   /**
    * NOTE: Post changes rather than use AFrame Watcher
    */
   writeChanges = () => {
     var changes = AFRAME.INSPECTOR.history.updates;
+    var remove = AFRAME.INSPECTOR.remove.remove; // [<id>]
+    for (const id of remove) {
+      if (!changes[id]) changes[id] = {};
+      changes[id].remove = true;
+    }
     var message = {
       changes: changes.length < 1 ? {} : changes,
       target: "accelerate-editor"
@@ -101,19 +102,6 @@ export default class Toolbar extends React.Component {
     return (
       <div id="toolbar">
         <div className="toolbarActions">
-          <a
-            className="button fa fa-plus"
-            title="Add a new entity"
-            onClick={this.addEntity}
-          />
-          <a
-            id="playPauseScene"
-            className={
-              "button fa " + (this.state.isPlaying ? "fa-pause" : "fa-play")
-            }
-            title={this.state.isPlaying ? "Pause scene" : "Resume scene"}
-            onClick={this.toggleScenePlaying}
-          />
           <a
             className="gltfIcon"
             title="Export to GLTF"
