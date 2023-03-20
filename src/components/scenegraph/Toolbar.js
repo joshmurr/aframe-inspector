@@ -66,7 +66,7 @@ export default class Toolbar extends React.Component {
    */
   writeChanges = () => {
     var changes = AFRAME.INSPECTOR.history.updates;
-    var remove = AFRAME.INSPECTOR.remove.remove; // [<id>]
+    var remove = AFRAME.INSPECTOR.remove.remove;
     for (const id of remove) {
       if (!changes[id]) changes[id] = {};
       changes[id].remove = true;
