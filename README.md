@@ -1,56 +1,10 @@
-# A-Frame Inspector
+# Accelerate Editor A-Frame Inspector
 
-[![build status][travis-image]][travis-url]
+This is a fork of [aframevr/aframe-inspector](https://github.com/aframevr/aframe-inspector) for use with the [Accelerate Editor](https://accelerate-editor.web.app/).
 
-A visual inspector tool for [A-Frame](https://aframe.io) scenes. Just hit
-`<ctrl> + <alt> + i` on any A-Frame scene to open up the Inspector.
+## Change Log
 
-- [Documentation / Guide](https://aframe.io/docs/master/introduction/visual-inspector-and-dev-tools.html)
-- [Example](https://aframe.io/aframe-inspector/examples/)
-
-Also check out:
-
-- [A-Frame Watcher](https://github.com/supermedium/aframe-watcher) - Companion server to sync changes to HTML files.
-
-![Inspector Preview](https://user-images.githubusercontent.com/674727/50159991-fa540c80-028c-11e9-87f1-72c54e08d808.png)
-
-## Using the Inspector
-
-### Keyboard Shortcut
-
-A-Frame comes with a **keyboard shortcut** to inject the inspector. Just open
-up any A-Frame scene (running at least A-Frame v0.3.0) and press **`<ctrl> +
-<alt> + i`** to inject the inspector, just like you would use a DOM inspector:
-
-### Specifying Inspector Build
-
-This is done with the `inspector` component. By default, this is set on the
-scene already. If we want, we can specify a specific build of the Inspector to
-inject by passing a URL. For debugging:
-
-```html
-<a-scene inspector="url: http://localhost:3333/dist/aframe-inspector.js">
-  <!-- Scene... -->
-</a-scene>
-```
-
-To use the master branch of the Inspector:
-
-```html
-<a-scene inspector="https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
-</a-scene>
-```
-
-## Local Development
-
-```bash
-git clone git@github.com:aframevr/aframe-inspector.git
-cd aframe-inspector
-npm install
-npm start
-```
-
-Then navigate to __[http://localhost:3333/examples/](http://localhost:3333/examples/)__
-
-[travis-image]: https://img.shields.io/travis/aframevr/aframe-inspector.svg?style=flat-square
-[travis-url]: https://travis-ci.org/aframevr/aframe-inspector
+- The original Inspector would use A-Frame Watcher to update the HTML document as changes are saved in the Inspector. This version `postMessage`'s the changes instead which can the be grabbed by the parent Accelerate Editor window to update the live doc ([see line 78 in components/scenegraph/Toolbar.js here](https://github.com/joshmurr/aframe-inspector/blob/master/src/components/scenegraph/Toolbar.js#L78))>
+- The ID of an entity is used as a reference to make changes in the live doc, so is `readonly` in the Inspector so the user cannot change it _in this view_. The ID can be changed in the live doc. [See line 145 of components/components/CommonComponents.js here](https://github.com/joshmurr/aframe-inspector/blob/master/src/components/components/CommonComponents.js#L145).
+- The user can set the 'respawn limit' in the Inspector which sets a lower limit to trigger a respawn if the user is falling indefinitely. The respawn location can be set with the users position. [See components/BottomBar.js here](https://github.com/joshmurr/aframe-inspector/blob/master/src/components/scenegraph/BottomBar.js).
+- The user can toggle whether to save the location of objects moved from grabbing in VR mode after dropping. This is toggleable because as of now (04/23) this is actually really annoying as it triggers a page reload. The toggle is read by A-Game and is the flag which tells it to `postMessage` or not. [See components/BottomBar.js here](https://github.com/joshmurr/aframe-inspector/blob/master/src/components/scenegraph/BottomBar.js).
